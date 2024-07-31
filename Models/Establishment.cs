@@ -26,7 +26,5 @@ namespace Api.Models
         public string Url { get; set; } = "";
 
         public string PixKey { get; set; } = "";
-
-
     }
 }

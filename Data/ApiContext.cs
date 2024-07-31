@@ -3,14 +3,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Api.Data
 {
-    public class EstablishmentContext : DbContext
+    public class ApiContext : DbContext
     {
-        public EstablishmentContext(DbContextOptions<EstablishmentContext> opts)
+        public ApiContext(DbContextOptions<ApiContext> opts)
             : base(opts)
         {
 
         }
 
         public DbSet<Establishment> Establishments { get; set; }
+
+        public DbSet<User> Users { get; set; }
     }
 }

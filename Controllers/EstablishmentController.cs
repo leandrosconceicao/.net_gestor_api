@@ -1,9 +1,10 @@
 ﻿using Api.Data;
-using Api.Data.Dtos;
+using Api.Data.Dtos.EstablishmentDtos;
 using Api.Models;
 using Api.Models.Base;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Api.Controllers
 {
@@ -11,22 +12,28 @@ namespace Api.Controllers
     [Route("[controller]")]
     public class EstablishmentController : ControllerBase
     {
-        private EstablishmentContext _context;
-        private IMapper _mapper;
-        public EstablishmentController(EstablishmentContext ctx, IMapper mapper)
+        private readonly ICoreRepository _repo;
+        private readonly IMapper _mapper;
+        public EstablishmentController(ICoreRepository repo, IMapper mapper)
         {
-            _context = ctx;
+            _repo = repo;
             _mapper = mapper;
         }
 
         [HttpPost]
-        public IActionResult AddNew([FromBody] CreateEstablishmentDto dto)
+        public async Task<IActionResult> AddNew([FromBody] CreateEstablishmentDto dto)
         {
-            var establishment = _mapper.Map<Establishment>(dto);
+            try
+            {
+                var establishment = _mapper.Map<Establishment>(dto);
 
-            _context.Establishments.Add(establishment);
-            _context.SaveChanges();
-            return CreatedAtAction(nameof(FindOneById),new {id = establishment.Id}, establishment );
+                _repo.Add(establishment);
+                await _repo.SaveChangeAsync();
+                return CreatedAtAction(nameof(FindOneById), new { id = establishment.Id }, establishment);
+            }
+            catch (Exception ex) { 
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("{id}")]
@@ -38,33 +45,48 @@ namespace Api.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Establishment> FindAll([FromHeader] int offset = 0, [FromHeader] int limit = 50)
+        public async Task<IEnumerable<Establishment>> FindAll([FromHeader] int offset = 0, [FromHeader] int limit = 50)
         {
-            return _mapper.Map<List<Establishment>>(_context.Establishments.Skip(offset).Take(limit));
+            IEnumerable<Establishment> establishments = await _repo.FindAllEstablishments(offset, limit);
+            return _mapper.Map<List<Establishment>>(establishments);
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id) {
-            var data = GetEstablishment(id);
-            if (data == null) return NotFound();
-            _context.Establishments.Remove(data);
-            _context.SaveChanges();
-            return Ok();
+        public async Task<IActionResult> Delete(int id) {
+            try
+            {
+                var data = GetEstablishment(id);
+                if (data == null) return NotFound();
+                _repo.Delete(data);
+                await _repo.SaveChangeAsync();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateById(int id, [FromBody] UpdateEstablishmentDto dto)
+        public async Task<IActionResult> UpdateById(int id, [FromBody] UpdateEstablishmentDto dto)
         {
             var establishment = GetEstablishment(id);
             if (establishment == null) return NotFound();
             _mapper.Map(dto, establishment);
-            _context.SaveChanges();
+            await _repo.SaveChangeAsync();
             return NoContent();
         }
 
 
-        private Establishment? GetEstablishment(int id) {
-            return _context.Establishments.FirstOrDefault(e => e.Id == id);
+        private async Task<Establishment?> GetEstablishment(int id) {
+            try
+            {
+                return await _repo.FindEstablishmentById(id);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         

@@ -1,5 +1,6 @@
 using Api;
 using Api.Data;
+using Api.Models.Base;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,9 +9,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 var config = new DbConfig();
 
-builder.Services.AddDbContext<EstablishmentContext>(opts =>
+builder.Services.AddDbContext<ApiContext>(opts =>
     opts.UseMySql(config.ConnectionString, ServerVersion.AutoDetect(config.ConnectionString))
 );
+
+builder.Services.AddScoped<ICoreRepository, CoreRepository>();
 
 builder.Services.
     AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

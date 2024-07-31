@@ -1,13 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Api.Data.Dtos
+namespace Api.Data.Dtos.EstablishmentDtos
 {
-    public class UpdateEstablishmentDto
+    public class ReadEstablishmentDto
     {
-        [Required]
+        public int Id { get; set; }
+
         public string Description { get; set; }
 
-        [Required]
         public string OwnerId { get; set; }
 
         public string LogoFilePath { get; set; }

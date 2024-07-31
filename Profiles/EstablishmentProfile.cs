@@ -1,4 +1,4 @@
-﻿using Api.Data.Dtos;
+﻿using Api.Data.Dtos.EstablishmentDtos;
 using Api.Models;
 using AutoMapper;
 

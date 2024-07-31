@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Api.Models.Base;
 
-namespace Api.Models
+namespace Api.Data.Dtos.UserDtos
 {
-    public class User
+    public class UpdateUserDto
     {
         [Key]
         [Required]
@@ -17,20 +16,15 @@ namespace Api.Models
         [Required(ErrorMessage = "username é campo obrigatório")]
         public string UserName { get; set; }
 
-        public bool IsActived { get; set; }
-
-        public bool ChangePassword { get; set; }
+        public bool IsActived { get; set; } = false;
         public bool? IsDeleted { get; set; }
 
         public string Token { get; set; }
 
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         public DateTime UpdateAt { get; set; }
 
-        [Required(ErrorMessage = "Identificação do estabelecimento é obrigatório")]
         public int EstablishmentId { get; set; }
-
-        public Establishment Establishment { get; set; }
     }
 }
