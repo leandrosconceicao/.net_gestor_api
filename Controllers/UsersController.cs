@@ -1,10 +1,8 @@
-﻿using Api.Data;
-using Api.Data.Dtos.UserDtos;
+﻿using Api.Data.Dtos.UserDtos;
 using Api.Models;
 using Api.Models.Base;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Api.Controllers
 {
@@ -23,17 +21,23 @@ namespace Api.Controllers
         [HttpPost]
         public async Task<IActionResult> AddNew([FromBody] CreateUserDto dto)
         {
-            var user = _mapper.Map<User>(dto);
+            try
+            {
+                User? user = _mapper.Map<User>(dto);
 
-            _coreRepository.Add(user);
-            await _coreRepository.SaveChangeAsync();
-            return CreatedAtAction(nameof(FindOneById),new {id = user.Id}, user );
+                _coreRepository.Add(user);
+                await _coreRepository.SaveChangeAsync();
+                return CreatedAtAction(nameof(FindOneById), new { id = user.Id }, user);
+            }
+            catch (Exception ex) { 
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("{id}")]
-        public IActionResult FindOneById(int id)
+        public async Task<IActionResult> FindOneById(int id)
         {
-            var data = FindUserById(id);
+            ReadUserDto? data = await FindUserById(id);
             if (data == null) return NotFound();
             return Ok(data);
         }
@@ -43,9 +47,8 @@ namespace Api.Controllers
         {
             try
             {
-                IEnumerable<User> users = await _coreRepository.FindAllUsers(offset, limit);
-                if (users == null) return Ok();
-                return Ok(_mapper.Map<List<User>>(users));
+                var users = await _coreRepository.FindAllUsers(offset, limit);
+                return Ok(users);
             }
             catch (Exception ex)
             {
@@ -74,9 +77,9 @@ namespace Api.Controllers
         {
             try
             {
-                var establishment = await FindUserById(id);
-                if (establishment == null) return NotFound();
-                _mapper.Map(dto, establishment);
+                var user = await FindUserById(id);
+                if (user == null) return NotFound();
+                _mapper.Map(dto, user);
                 await _coreRepository.SaveChangeAsync();
                 return NoContent();
             }
@@ -86,11 +89,9 @@ namespace Api.Controllers
         }
 
 
-        private async Task<User?> FindUserById(int id) {
+        private async Task<ReadUserDto?> FindUserById(int id) {
             return await _coreRepository.FindUserById(id);
-        }
-
-        
+        }       
 
     }
 }

@@ -37,18 +37,18 @@ namespace Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult FindOneById(int id)
+        public async Task<IActionResult> FindOneById(int id)
         {
-            var data = GetEstablishment(id);
+            var data = await GetEstablishment(id);
             if (data == null) return NotFound();
             return Ok(data);
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Establishment>> FindAll([FromHeader] int offset = 0, [FromHeader] int limit = 50)
+        public async Task<IEnumerable<ReadEstablishmentDto>> FindAll([FromHeader] int offset = 0, [FromHeader] int limit = 50)
         {
-            IEnumerable<Establishment> establishments = await _repo.FindAllEstablishments(offset, limit);
-            return _mapper.Map<List<Establishment>>(establishments);
+            IEnumerable<ReadEstablishmentDto> establishments = await _repo.FindAllEstablishments(offset, limit);
+            return _mapper.Map<List<ReadEstablishmentDto>>(establishments);
         }
 
         [HttpDelete("{id}")]
@@ -70,7 +70,7 @@ namespace Api.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateById(int id, [FromBody] UpdateEstablishmentDto dto)
         {
-            var establishment = GetEstablishment(id);
+            var establishment = await GetEstablishment(id);
             if (establishment == null) return NotFound();
             _mapper.Map(dto, establishment);
             await _repo.SaveChangeAsync();
@@ -78,7 +78,7 @@ namespace Api.Controllers
         }
 
 
-        private async Task<Establishment?> GetEstablishment(int id) {
+        private async Task<ReadEstablishmentDto?> GetEstablishment(int id) {
             try
             {
                 return await _repo.FindEstablishmentById(id);
