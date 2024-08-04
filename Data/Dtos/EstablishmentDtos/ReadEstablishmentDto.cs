@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Api.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace Api.Data.Dtos.EstablishmentDtos
 {
@@ -19,5 +20,10 @@ namespace Api.Data.Dtos.EstablishmentDtos
         public string Url { get; set; }
 
         public string PixKey { get; set; }
+        public string Instagram { get; set; } = string.Empty;
+        public string Whatsapp { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string Phone { get; set; } = string.Empty;
+
     }
 }

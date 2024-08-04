@@ -1,20 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Api.Models.Base;
-
-namespace Api.Models
+﻿namespace Api.Models
 {
     public class User
     {
-        [Key]
-        [Required]
         public int Id { get; set; }
-        [Required(ErrorMessage = "email é campo obrigatório")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "password é campo obrigatório")]
         public string Password { get; set; }
 
-        [Required(ErrorMessage = "username é campo obrigatório")]
         public string UserName { get; set; }
 
         public bool IsActived { get; set; }
@@ -26,11 +18,18 @@ namespace Api.Models
 
         public DateTime CreatedAt { get; set; }
 
-        public DateTime UpdateAt { get; set; }
+        public DateTime? UpdateAt { get; set; }
 
-        [Required(ErrorMessage = "Identificação do estabelecimento é obrigatório")]
         public int EstablishmentId { get; set; }
 
-        public Establishment Establishment { get; set; }
+        public virtual Establishment Establishment { get; set; }
+
+        public Role Role { get; set; } = Role.Operator;
+    }
+
+    public enum Role {
+        Administrator = 1,
+        Operator = 0,
+        SuperUser = 99
     }
 }
