@@ -14,5 +14,13 @@ namespace Api.Data
         public DbSet<Establishment> Establishments { get; set; }
 
         public DbSet<User> Users { get; set; }
+
+        public DbSet<Account> Accounts {get; set;}
+
+        public DbSet<Client> Clients {get; set;}
+
+        public DbSet<ClientAddress> ClientAddresses {get; set;}
+
+
     }
 }
