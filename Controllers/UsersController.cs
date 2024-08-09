@@ -37,9 +37,9 @@ namespace Api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> FindOneById(int id)
         {
-            ReadUserDto? data = await FindUserById(id);
+            var data = await FindUserById(id);
             if (data == null) return NotFound();
-            return Ok(data);
+            return Ok(_mapper.Map<ReadUserDto>(data));
         }
 
         [HttpGet]
@@ -48,7 +48,7 @@ namespace Api.Controllers
             try
             {
                 var users = await _coreRepository.FindAllUsers(offset, limit);
-                return Ok(users);
+                return Ok(_mapper.Map<IEnumerable<ReadUserDto>>(users));
             }
             catch (Exception ex)
             {
@@ -89,7 +89,7 @@ namespace Api.Controllers
         }
 
 
-        private async Task<ReadUserDto?> FindUserById(int id) {
+        private async Task<User?> FindUserById(int id) {
             return await _coreRepository.FindUserById(id);
         }       
 

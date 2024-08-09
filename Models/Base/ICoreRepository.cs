@@ -1,4 +1,5 @@
-﻿using Api.Data.Dtos.EstablishmentDtos;
+﻿using Api.Data.Dtos.AccountDtos;
+using Api.Data.Dtos.EstablishmentDtos;
 using Api.Data.Dtos.UserDtos;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -16,12 +17,16 @@ namespace Api.Models.Base
 
         Task<bool> SaveChangeAsync();
 
-        Task<ReadEstablishmentDto?> FindEstablishmentById(int id);
+        Task<Establishment?> FindEstablishmentById(int id);
 
-        Task<IEnumerable<ReadEstablishmentDto>> FindAllEstablishments(int offset = 0, int limit = 50);
+        Task<IEnumerable<Establishment>> FindAllEstablishments(int offset = 0, int limit = 50);
 
-        Task<ReadUserDto?> FindUserById(int id);
+        Task<User?> FindUserById(int id);
 
-        Task<IEnumerable<ReadUserDto>> FindAllUsers(int offset = 0, int limit = 50);
+        Task<IEnumerable<User>> FindAllUsers(int offset = 0, int limit = 50);
+
+        Task<Account?> FindAccountById(int id);
+
+        Task<IEnumerable<Account>> FindAllAccounts(int establishmentId, int offset = 0, int limit = 50);
     }
 }

@@ -1,10 +1,8 @@
-﻿using Api.Data;
-using Api.Data.Dtos.EstablishmentDtos;
+﻿using Api.Data.Dtos.EstablishmentDtos;
 using Api.Models;
 using Api.Models.Base;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Api.Controllers
 {
@@ -47,7 +45,7 @@ namespace Api.Controllers
         [HttpGet]
         public async Task<IEnumerable<ReadEstablishmentDto>> FindAll([FromHeader] int offset = 0, [FromHeader] int limit = 50)
         {
-            IEnumerable<ReadEstablishmentDto> establishments = await _repo.FindAllEstablishments(offset, limit);
+            IEnumerable<Establishment> establishments = await _repo.FindAllEstablishments(offset, limit);
             return _mapper.Map<List<ReadEstablishmentDto>>(establishments);
         }
 
@@ -78,7 +76,7 @@ namespace Api.Controllers
         }
 
 
-        private async Task<ReadEstablishmentDto?> GetEstablishment(int id) {
+        private async Task<Establishment?> GetEstablishment(int id) {
             try
             {
                 return await _repo.FindEstablishmentById(id);

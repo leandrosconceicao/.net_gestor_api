@@ -13,6 +13,8 @@ namespace Api.Data.Dtos.UserDtos
         public string Token { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime? UpdateAt { get; set; }
-        public ReadEstablishmentDto Establishment { get; set; }
+
+        public int EstablishmentId { get; set; }
+        public virtual ReadEstablishmentDto Establishment { get; set; }
     }
 }
