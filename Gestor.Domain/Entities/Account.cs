@@ -8,6 +8,8 @@ namespace Gestor.Domain.Entities
     {
         [Key]
         public int Id { get; set; }
+
+        public int Deleted { get; set; }
         public string Description { get; set; } = string.Empty;
         
         [EnumDataType(typeof(AccountStatus), ErrorMessage = "Status inválido, Valores permitidos: (0) - open, (1) - closed, (2) - hold")]

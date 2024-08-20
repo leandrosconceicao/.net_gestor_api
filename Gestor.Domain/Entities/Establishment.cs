@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Gestor.Domain.Entities
 {
@@ -6,6 +7,8 @@ namespace Gestor.Domain.Entities
     {
         [Key]
         public int Id { get; set; }
+
+        public int? Deleted { get; set; }
 
         public string Description { get; set; }
 
@@ -25,5 +28,11 @@ namespace Gestor.Domain.Entities
         public string Whatsapp { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string Phone { get; set; } = string.Empty;
+
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public DateTime CreatedAt { get; set; }
+
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public DateTime? UpdatedAt { get; set; }
     }
 }

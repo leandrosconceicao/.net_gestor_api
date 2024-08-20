@@ -12,7 +12,7 @@
         public bool IsActived { get; set; }
 
         public bool ChangePassword { get; set; }
-        public bool? IsDeleted { get; set; }
+        public int? Deleted { get; set; }
 
         public string Token { get; set; }
 
