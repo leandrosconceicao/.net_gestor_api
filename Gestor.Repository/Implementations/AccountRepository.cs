@@ -25,9 +25,12 @@ namespace Gestor.Repository.Implementations
             _context.Add(entity);
         }
 
-        public void Delete(Account entity)
+        public async Task<bool> Delete(int id)
         {
-            _context.Remove(entity);
+            string query = "UPDATE accounts SET Deleted = @Id WHERE Id = @Id";
+            using var con = new MySqlConnection(_connectionString);
+            int affectedRows = await con.ExecuteAsync(query, new {Id = id});
+            return affectedRows > 0;
         }
 
         public async Task<bool> SaveChangeAsync()

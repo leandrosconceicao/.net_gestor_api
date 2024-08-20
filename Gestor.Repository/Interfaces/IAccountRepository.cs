@@ -8,7 +8,7 @@ namespace Gestor.Repository.Interfaces
 
         void Update(Account entity);
 
-        void Delete(Account entity);
+        Task<bool> Delete(int id);
 
         Task<IEnumerable<Account>> FindAll(int establishmentId, int offset = 0, int limit = 50);
 
