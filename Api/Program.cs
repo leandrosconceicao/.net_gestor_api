@@ -12,7 +12,7 @@ var connectionString = builder.Configuration.GetConnectionString("SqlConnection"
 
 builder.Services
         .AddDbContext<ApiContext>(opts =>
-            opts.UseMySQL(connectionString)
+            opts.UseMySQL(connectionString, b => b.MigrationsAssembly("Api"))
         )
         .AddScoped<IAccountRepository, AccountRepository>()
         .AddScoped<IProductRepository, ProductCategoryRepository>()
@@ -24,7 +24,8 @@ builder.Services.
         typeof(UserProfile).Assembly,
         typeof(EstablishmentProfile).Assembly,
         typeof(AccountProfile).Assembly,
-        typeof(ProductProfile).Assembly
+        typeof(ProductProfile).Assembly,
+        typeof(ClientProfile).Assembly
     );
 
 
