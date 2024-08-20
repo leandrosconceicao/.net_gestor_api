@@ -8,8 +8,8 @@ public class AccountProfile : Profile
 {
     public AccountProfile()
     {
-        CreateMap<AccountDto, Account>();
-        CreateMap<Account, AccountDto>();
+        CreateMap<CreateAccountDto, Account>();
+        CreateMap<Account, ReadAccountDto>();
         CreateMap<UpdateAccountDto, Account>();
     }
 }
