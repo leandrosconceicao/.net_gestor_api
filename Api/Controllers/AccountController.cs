@@ -11,21 +11,15 @@ namespace Api.Controllers
     [ApiController]
     [Route("[controller]")]
 
-    public class AccountController : ControllerBase
+    public class AccountController(IAccountRepository repo, IMapper mapper) : ControllerBase
     {
 
-        private readonly IAccountRepository _coreRepo;
+        private readonly IAccountRepository _coreRepo = repo;
 
-        private readonly IMapper _mapper;
-
-        public AccountController(IAccountRepository repo, IMapper mapper)
-        {
-            _coreRepo = repo;
-            _mapper = mapper;
-        }
+        private readonly IMapper _mapper = mapper;
 
         [HttpPost]
-        public async Task<IActionResult> AddNew([FromBody] AccountDto dto)
+        public async Task<IActionResult> AddNew([FromBody] CreateAccountDto dto)
         {
             try
             {
@@ -43,8 +37,14 @@ namespace Api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> FindOneById(int id)
         {
-            var query = await GetAccountById(id);
-            return query == null ? NotFound() : Ok(_mapper.Map<AccountDto>(query));
+            try
+            {
+                var query = await GetAccountById(id);
+                return query == null ? NotFound() : Ok(_mapper.Map<ReadAccountDto>(query));
+            }
+            catch (Exception ex) {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet]
@@ -57,7 +57,7 @@ namespace Api.Controllers
             try
             {
                 var query = await _coreRepo.FindAll(establishmentId, offset, limit);
-                return Ok(_mapper.Map<IEnumerable<AccountDto>>(query));
+                return Ok(_mapper.Map<IEnumerable<ReadAccountDto>>(query));
             }
             catch (Exception ex)
             {
