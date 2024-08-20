@@ -10,5 +10,11 @@ namespace Gestor.Repository
         public DbSet<Client> Clients { get; set; }
 
         public DbSet<ClientAddress> ClientAddresses { get; set; }
+
+        public DbSet<Establishment> Establishments { get; set; }
+
+        public DbSet<User> Users { get; set; }
+
+        public DbSet<ProductCategory> ProductCategories { get; set; }
     }
 }
