@@ -33,7 +33,6 @@ namespace Gestor.Helpers.Models.UserDtos
         public bool IsActived { get; set; } = true;
 
         public bool ChangePassword { get; set; } = false;
-        public bool? IsDeleted { get; set; }
         public string Token { get; set; } = string.Empty;
 
         [DataType(DataType.DateTime)]
