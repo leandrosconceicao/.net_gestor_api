@@ -85,8 +85,10 @@ namespace Api.Controllers
             {
                 var query = await GetAccountById(id);
                 if (query == null) return NotFound();
-                _coreRepo.Delete(query);
-                await _coreRepo.SaveChangeAsync();
+                bool isDeleted = await _coreRepo.Delete(query.Id);
+                if (!isDeleted) {
+                    return BadRequest("Nenhum dado foi excluido");
+                }
                 return Ok();
             }
             catch (Exception ex)
