@@ -35,7 +35,7 @@ namespace Gestor.Repository.Implementations
         {
             string query = @"SELECT *
                                 FROM users
-                                    WHERE EstablishmentId = @Id AND IsDeleted IS NULL
+                                    WHERE EstablishmentId = @Id AND Deleted IS NULL
                                 LIMIT @Limit OFFSET @Offset";
             using var con = new MySqlConnection(_connectionString);
             var users = await con.QueryAsync<User>(query, new {Id = establishmentId, Limit = limit, Offset = offset});
@@ -62,7 +62,7 @@ namespace Gestor.Repository.Implementations
                 @Token,
                 @EstablishmentId,
                 @Role,
-                @CreatedAt
+                STR_TO_DATE(sysdate(), ""%Y-%m-%d %H:%i:%s"")
             );
             SELECT LAST_INSERT_ID();";
             using var con = new MySqlConnection(_connectionString);

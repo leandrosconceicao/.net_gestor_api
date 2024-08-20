@@ -46,7 +46,8 @@ namespace Gestor.Repository.Implementations
                                 Email,
                                 Instagram,
                                 Phone,
-                                Whatsapp
+                                Whatsapp,
+                                CreatedAt
                             ) values (
                                 @Description, 
                                 @OwnerId, 
@@ -58,7 +59,8 @@ namespace Gestor.Repository.Implementations
                                 @Email, 
                                 @Instagram,
                                 @Phone, 
-                                @Whatsapp
+                                @Whatsapp,
+                                STR_TO_DATE(sysdate(), ""%Y-%m-%d %H:%i:%s"")
                             );
                             SELECT LAST_INSERT_ID();";
             using var con = new MySqlConnection(_connectionString);
@@ -89,6 +91,7 @@ namespace Gestor.Repository.Implementations
                                 Whatsapp = @Whatsapp,
                                 Email = @Email,
                                 Phone = @Phone,
+                                UpdatedAt = STR_TO_DATE(sysdate(), ""%Y-%m-%d %H:%i:%s"")
                             WHERE 
                                 Id = @Id";
             using var con = new MySqlConnection(_connectionString);
