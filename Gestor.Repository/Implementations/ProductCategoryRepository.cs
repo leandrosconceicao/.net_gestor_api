@@ -6,7 +6,7 @@ using MySql.Data.MySqlClient;
 
 namespace Gestor.Repository.Implementations
 {
-    public class ProductCategoryRepository : IProductRepository
+    public class ProductCategoryRepository : IProductCategoryRepository
     {
         private readonly IConfiguration _configuration;
         private readonly String _connectionString;
@@ -46,13 +46,13 @@ namespace Gestor.Repository.Implementations
             return productCategories.FirstOrDefault();
         }
 
-        public async Task<bool> AddProductCategoryAsync(ProductCategory category)
+        public async Task<int> AddProductCategoryAsync(ProductCategory category)
         {
             string query = @"INSERT INTO productcategories (Description, ImagePath, Ordenation, EstablishmentId)
                                 VALUES (@Description, @ImagePath, @Ordenation, @EstablishmentId)";
             using var con = new MySqlConnection(_connectionString);
             var affectedRows = await con.ExecuteAsync(query, category);
-            return affectedRows > 0;
+            return affectedRows;
         }
 
         public async Task<bool> DeleteProductCategoryAsync(int id)

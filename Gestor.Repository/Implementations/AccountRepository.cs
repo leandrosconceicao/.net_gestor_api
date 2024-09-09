@@ -60,7 +60,7 @@ namespace Gestor.Repository.Implementations
                 usr.UserName,
                 usr.IsActived,
                 usr.ChangePassword,
-                usr.IsDeleted,
+                usr.Deleted,
                 usr.Token,
                 usr.CreatedAt,
                 usr.UpdateAt,

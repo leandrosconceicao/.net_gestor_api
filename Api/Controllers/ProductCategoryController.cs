@@ -8,13 +8,13 @@ namespace Api.Controllers
 {
 
     [ApiController]
-    [Route("[controller]")]
+    [Route("/product/category/")]
     public class ProductCategoryController : ControllerBase
     {
 
-        private readonly IProductRepository _repo;
+        private readonly IProductCategoryRepository _repo;
         private readonly IMapper _mapper;
-        public ProductCategoryController(IProductRepository repo, IMapper mapper)
+        public ProductCategoryController(IProductCategoryRepository repo, IMapper mapper)
         {
             _repo = repo;
             _mapper = mapper;
@@ -26,8 +26,9 @@ namespace Api.Controllers
             try
             {
                 var category = _mapper.Map<ProductCategory>(dto);
-                await _repo.AddProductCategoryAsync(category);
-                return CreatedAtAction(nameof(FindCategoryById), new { id = category.Id }, category);
+                var newCategoryId = await _repo.AddProductCategoryAsync(category);
+                var newCategory = await _repo.FindProductCategoryById(newCategoryId);
+                return CreatedAtAction(nameof(FindCategoryById), new { id = newCategoryId }, newCategory);
             }
             catch (Exception ex)
             {
@@ -72,7 +73,7 @@ namespace Api.Controllers
                 var isProductCategoryDeleted = await _repo.DeleteProductCategoryAsync(id);
                 if (!isProductCategoryDeleted)
                 {
-                    return NotFound("Conta não foi localizada");
+                    return NotFound("Categoria não localizada");
                 }
                 return Ok();
             }

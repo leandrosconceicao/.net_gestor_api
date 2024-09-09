@@ -15,9 +15,11 @@ builder.Services
             opts.UseMySQL(connectionString, b => b.MigrationsAssembly("Api"))
         )
         .AddScoped<IAccountRepository, AccountRepository>()
-        .AddScoped<IProductRepository, ProductCategoryRepository>()
+        .AddScoped<IProductCategoryRepository, ProductCategoryRepository>()
         .AddScoped<IEstablishmentRepository, EstablishmentRepository>()
-        .AddScoped<IUserRepository, UserRepository>();
+        .AddScoped<IUserRepository, UserRepository>()
+        .AddScoped<IProductRepository, ProductRepository>()
+        .AddScoped<IProductExtraRepository, ProductExtraRepository>();
 
 builder.Services.
     AddAutoMapper(
