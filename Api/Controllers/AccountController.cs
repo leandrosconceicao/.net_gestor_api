@@ -1,6 +1,6 @@
 using AutoMapper;
 using Gestor.Domain.Entities;
-using Gestor.Helpers.Models.AccountDtos;
+using Gestor.Domain.Dtos.AccountDtos;
 using Gestor.Repository.Interfaces;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;

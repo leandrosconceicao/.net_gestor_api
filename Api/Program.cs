@@ -1,5 +1,6 @@
-using Gestor.Helpers.Profiles;
+using Gestor.Domain.Profiles;
 using Gestor.Repository;
+using Gestor.Repository.Db;
 using Gestor.Repository.Implementations;
 using Gestor.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;

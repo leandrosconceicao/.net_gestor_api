@@ -1,11 +1,12 @@
 ﻿using Dapper;
 using Gestor.Domain.Entities;
+using Gestor.Repository.Db;
 using Gestor.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 
-namespace Gestor.Repository.Implementations
+namespace Gestor.Repository
 {
     public class AccountRepository : IAccountRepository
     {
@@ -29,13 +30,13 @@ namespace Gestor.Repository.Implementations
         {
             string query = "UPDATE accounts SET Deleted = @Id WHERE Id = @Id";
             using var con = new MySqlConnection(_connectionString);
-            int affectedRows = await con.ExecuteAsync(query, new {Id = id});
+            int affectedRows = await con.ExecuteAsync(query, new { Id = id });
             return affectedRows > 0;
         }
 
         public async Task<bool> SaveChangeAsync()
         {
-            return (await _context.SaveChangesAsync()) > 0;
+            return await _context.SaveChangesAsync() > 0;
         }
 
         public void Update(Account entity)

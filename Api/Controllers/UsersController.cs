@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Gestor.Domain.Entities;
-using Gestor.Helpers.Models.UserDtos;
+using Gestor.Domain.Dtos.UserDtos;
 using Gestor.Repository.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 

@@ -4,7 +4,7 @@ using Gestor.Repository.Interfaces;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 
-namespace Gestor.Repository.Implementations
+namespace Gestor.Repository
 {
     public class UserRepository : IUserRepository
     {
@@ -24,7 +24,8 @@ namespace Gestor.Repository.Implementations
 	                            INNER JOIN establishments est on usr.EstablishmentId = est.Id
 		                                WHERE usr.Id = @Id";
             using var con = new MySqlConnection(_connectionString);
-            var users = await con.QueryAsync<User, Establishment, User>(query, (user, establishment) => {
+            var users = await con.QueryAsync<User, Establishment, User>(query, (user, establishment) =>
+            {
                 user.Establishment = establishment;
                 return user;
             }, new { Id = id });
@@ -38,7 +39,7 @@ namespace Gestor.Repository.Implementations
                                     WHERE EstablishmentId = @Id AND Deleted IS NULL
                                 LIMIT @Limit OFFSET @Offset";
             using var con = new MySqlConnection(_connectionString);
-            var users = await con.QueryAsync<User>(query, new {Id = establishmentId, Limit = limit, Offset = offset});
+            var users = await con.QueryAsync<User>(query, new { Id = establishmentId, Limit = limit, Offset = offset });
             return users;
         }
         public async Task<int> AddUserAsync(User user)

@@ -1,11 +1,12 @@
 ﻿using Dapper;
 using Gestor.Domain.Entities;
+using Gestor.Repository.Db;
 using Gestor.Repository.Interfaces;
 using Google.Protobuf.Collections;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 
-namespace Gestor.Repository.Implementations
+namespace Gestor.Repository
 {
     public class ProductExtraRepository : IProductExtraRepository
     {
@@ -34,7 +35,8 @@ namespace Gestor.Repository.Implementations
                                         productextraitems prodex ON prodex.ProductExtraId = px.Id
                                     WHERE px.Id = @Id";
             using var con = new MySqlConnection(_connectionString);
-            var productExtra = await con.QueryAsync<ProductExtra, ProductExtraItem, ProductExtra>(query, (productExtra, ProductExtraItem) => {
+            var productExtra = await con.QueryAsync<ProductExtra, ProductExtraItem, ProductExtra>(query, (productExtra, ProductExtraItem) =>
+            {
                 productExtra.Items.Add(ProductExtraItem);
                 return productExtra;
             }, new { Id = id });

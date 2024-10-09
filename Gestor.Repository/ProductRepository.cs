@@ -1,10 +1,11 @@
 ﻿using Dapper;
 using Gestor.Domain.Entities;
+using Gestor.Repository.Db;
 using Gestor.Repository.Interfaces;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 
-namespace Gestor.Repository.Implementations
+namespace Gestor.Repository
 {
     public class ProductRepository : IProductRepository
     {
@@ -25,7 +26,7 @@ namespace Gestor.Repository.Implementations
             _context.Products.Add(product);
             return await _context.SaveChangesAsync();
             //string query = @"INSERT INTO products (
-	           //                 Name,
+            //                 Name,
             //                    IsActive,
             //                    Price,
             //                    RequirePreparation,
@@ -34,7 +35,7 @@ namespace Gestor.Repository.Implementations
             //                    EstablishmentId,
             //                    CategoryId
             //                ) VALUES (
-	           //                 @Name,
+            //                 @Name,
             //                    @IsActive,
             //                    @Price,
             //                    @RequirePreparation,
@@ -45,13 +46,13 @@ namespace Gestor.Repository.Implementations
             //                );
             //                SELECT LAST_INSERT_ID();
             //                INSERT INTO productxextras (
-	           //                 Required,
-	           //                 ProductExtraId,
-	           //                 ProductId 
+            //                 Required,
+            //                 ProductExtraId,
+            //                 ProductId 
             //                ) values (
-	           //                 @Required,
-	           //                 @ProductExtraId,
-	           //                 LAST_INSERT_ID()
+            //                 @Required,
+            //                 @ProductExtraId,
+            //                 LAST_INSERT_ID()
             //                )";
             //using var con = new MySqlConnection(_connectionString);
             //int rowsAffectd = await con.ExecuteScalarAsync<int>(query, product);
@@ -100,13 +101,13 @@ namespace Gestor.Repository.Implementations
                                 left join productextraitems pxi on pxi.ProductExtraId = px.Id
 	                        where p.Id = @Id
                                 group by pxe.Required, pxe.ProductExtraId";
-            var products = await con.QueryAsync<Product, ProductCategory, ProductCrossExtras, ProductExtraItem, Product>(query, 
+            var products = await con.QueryAsync<Product, ProductCategory, ProductCrossExtras, ProductExtraItem, Product>(query,
                 (product, productCategory, productExtra, ProductExtraItem) =>
                     {
                         product.Category = productCategory;
                         product.ProductExtras.Add(productExtra);
                         return product;
-                    },  new {Id = id}, splitOn: "EstablishmentId, Id");
+                    }, new { Id = id }, splitOn: "EstablishmentId, Id");
             var newProduct = products.First();
             return newProduct;
         }
@@ -119,7 +120,7 @@ namespace Gestor.Repository.Implementations
                                 WHERE Deleted IS NULL AND EstablishmentId = @Id
                             LIMIT @Limit OFFSET @Offset";
             using var con = new MySqlConnection(_connectionString);
-            var products = await con.QueryAsync<Product>(query, new { Id = establishmentId, Limit = limit, Offset = offset});
+            var products = await con.QueryAsync<Product>(query, new { Id = establishmentId, Limit = limit, Offset = offset });
             return products;
         }
     }

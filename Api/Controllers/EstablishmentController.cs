@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Gestor.Domain.Entities;
-using Gestor.Helpers.Models.EstablishmentDtos;
+using Gestor.Domain.Dtos.EstablishmentDtos;
 using Gestor.Repository.Implementations;
 using Microsoft.AspNetCore.Mvc;
 

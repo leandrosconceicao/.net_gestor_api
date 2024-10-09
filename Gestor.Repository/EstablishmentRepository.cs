@@ -1,9 +1,10 @@
 ﻿using Dapper;
 using Gestor.Domain.Entities;
+using Gestor.Repository.Implementations;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 
-namespace Gestor.Repository.Implementations
+namespace Gestor.Repository
 {
     public class EstablishmentRepository : IEstablishmentRepository
     {
@@ -20,7 +21,7 @@ namespace Gestor.Repository.Implementations
                                 WHERE Deleted IS NULL
                                     LIMIT @Limit OFFSET @Offset";
             using var con = new MySqlConnection(_connectionString);
-            var establishments = await con.QueryAsync<Establishment>(query, new {Offset = offset, Limit = limit});
+            var establishments = await con.QueryAsync<Establishment>(query, new { Offset = offset, Limit = limit });
             return establishments;
         }
 
@@ -30,7 +31,7 @@ namespace Gestor.Repository.Implementations
                                 FROM establishments 
                                     WHERE Id = @Id ";
             using var con = new MySqlConnection(_connectionString);
-            var establishment = await con.QueryFirstOrDefaultAsync<Establishment>(query, new {Id = id});
+            var establishment = await con.QueryFirstOrDefaultAsync<Establishment>(query, new { Id = id });
             return establishment;
         }
         public async Task<int> AddEstablishmentAsync(Establishment establishment)
@@ -73,7 +74,7 @@ namespace Gestor.Repository.Implementations
             string query = @"UPDATE establishments SET Deleted = @Id
                                 WHERE Id = @Id";
             using var con = new MySqlConnection(_connectionString);
-            var rowsAffected = await con.ExecuteAsync(query, new {Id = id});
+            var rowsAffected = await con.ExecuteAsync(query, new { Id = id });
             return rowsAffected > 0;
         }
 
@@ -95,10 +96,11 @@ namespace Gestor.Repository.Implementations
                             WHERE 
                                 Id = @Id";
             using var con = new MySqlConnection(_connectionString);
-            int rowsAffected = await con.ExecuteAsync(query, new { 
-                Id = id, 
-                establishment.Description, 
-                establishment.OwnerId, 
+            int rowsAffected = await con.ExecuteAsync(query, new
+            {
+                Id = id,
+                establishment.Description,
+                establishment.OwnerId,
                 establishment.LogoFilePath,
                 establishment.IsOpen,
                 establishment.Address,

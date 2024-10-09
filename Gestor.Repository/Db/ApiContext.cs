@@ -1,7 +1,7 @@
 ﻿using Gestor.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Gestor.Repository
+namespace Gestor.Repository.Db
 {
     public class ApiContext(DbContextOptions<ApiContext> opts) : DbContext(opts)
     {

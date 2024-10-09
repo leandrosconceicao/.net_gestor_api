@@ -4,12 +4,12 @@ using Gestor.Repository.Interfaces;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 
-namespace Gestor.Repository.Implementations
+namespace Gestor.Repository
 {
     public class ProductCategoryRepository : IProductCategoryRepository
     {
         private readonly IConfiguration _configuration;
-        private readonly String _connectionString;
+        private readonly string _connectionString;
 
         public ProductCategoryRepository(IConfiguration configuration)
         {
@@ -39,10 +39,11 @@ namespace Gestor.Repository.Implementations
                                 INNER JOIN establishments est ON p.EstablishmentId = est.Id
                                     where p.Id = @Id";
             using var con = new MySqlConnection(_connectionString);
-            var productCategories = await con.QueryAsync<ProductCategory, Establishment, ProductCategory>(query, (prodCategory, establishment) => {
+            var productCategories = await con.QueryAsync<ProductCategory, Establishment, ProductCategory>(query, (prodCategory, establishment) =>
+            {
                 prodCategory.Establishment = establishment;
                 return prodCategory;
-            },  new { Id = id }, splitOn: "EstablishmentId");
+            }, new { Id = id }, splitOn: "EstablishmentId");
             return productCategories.FirstOrDefault();
         }
 

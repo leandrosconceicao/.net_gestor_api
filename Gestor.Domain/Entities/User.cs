@@ -1,4 +1,6 @@
-﻿namespace Gestor.Domain.Entities
+﻿using Gestor.Domain.Enums;
+
+namespace Gestor.Domain.Entities
 {
     public class User
     {
@@ -25,11 +27,5 @@
         public virtual Establishment Establishment { get; set; }
 
         public Role Role { get; set; } = Role.Operator;
-    }
-
-    public enum Role {
-        Administrator = 1,
-        Operator = 0,
-        SuperUser = 99
     }
 }

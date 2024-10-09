@@ -2,7 +2,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Gestor.Repository.Interfaces;
 using Gestor.Domain.Entities;
-using Gestor.Helpers.Models.ProductDtos;
+using Gestor.Domain.Dtos.ProductDtos;
 
 namespace Api.Controllers
 {
