@@ -92,7 +92,10 @@ namespace Api.Controllers
         {
             try
             {
-                bool isDeleted = await _repository.DeleteProductAsync(id);
+                var product = await _repository.FindProductById(id);
+                if (product == null)
+                    return NotFound();
+                bool isDeleted = await _repository.DeleteProductAsync(product);
                 if (!isDeleted) {
                     return BadRequest();
                 }
