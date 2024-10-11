@@ -66,8 +66,24 @@ namespace Api.Controllers
 
         // PUT api/<ProductController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put(int id, [FromBody] UpdateProductDto dto)
         {
+            try
+            {
+                var product = _repository.FindProductById(id);
+                if (product == null)
+                    return NotFound();
+                var updatedProduct = await _mapper.Map(dto, product);
+                if (updatedProduct == null)
+        {
+                    return BadRequest();
+                }
+                _repository.UpdateProductAsync(updatedProduct);
+                return Ok(product);
+            }
+            catch (Exception ex) { 
+                return BadRequest(ex.Message);
+        }
         }
 
         // DELETE api/<ProductController>/5
