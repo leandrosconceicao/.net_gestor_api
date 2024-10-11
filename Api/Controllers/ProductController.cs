@@ -55,7 +55,7 @@ namespace Api.Controllers
             {
                 var newData = _mapper.Map<Product>(dto);
                 int newInsertedId = await _repository.AddProductAsync(newData);
-                var createdData = await _repository.FindProductById(newInsertedId);
+                return CreatedAtAction(nameof(FindProductById), new { Id = newInsertedId }, newData);
                 return CreatedAtAction(nameof(FindProductById), new {id = newInsertedId}, createdData);
             }
             catch (Exception ex)
