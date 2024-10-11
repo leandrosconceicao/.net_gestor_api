@@ -56,7 +56,6 @@ namespace Api.Controllers
                 var newData = _mapper.Map<Product>(dto);
                 int newInsertedId = await _repository.AddProductAsync(newData);
                 return CreatedAtAction(nameof(FindProductById), new { Id = newInsertedId }, newData);
-                return CreatedAtAction(nameof(FindProductById), new {id = newInsertedId}, createdData);
             }
             catch (Exception ex)
             {
@@ -75,7 +74,7 @@ namespace Api.Controllers
                     return NotFound();
                 var updatedProduct = await _mapper.Map(dto, product);
                 if (updatedProduct == null)
-        {
+                {
                     return BadRequest();
                 }
                 _repository.UpdateProductAsync(updatedProduct);
@@ -83,7 +82,7 @@ namespace Api.Controllers
             }
             catch (Exception ex) { 
                 return BadRequest(ex.Message);
-        }
+            }
         }
 
         // DELETE api/<ProductController>/5
