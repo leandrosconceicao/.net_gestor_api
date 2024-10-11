@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Gestor.Domain.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace Gestor.Domain.Dtos.ProductDtos
 {

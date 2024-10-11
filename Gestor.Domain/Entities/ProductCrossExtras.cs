@@ -12,6 +12,6 @@ namespace Gestor.Domain.Entities
 
         public int ProductId { get; set; }
 
-        public virtual ProductExtra ProductCrossExtra { get; set; }
+        public virtual ProductExtra ProductExtra { get; set; }
     }
 }

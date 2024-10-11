@@ -9,11 +9,14 @@ namespace Gestor.Domain.Entities
         [Required]
         public string Name { get; set; }
         public double MaxQtdAllowed { get; set; }
-        //public bool Required { get; set; } = false;
+
+        public bool Required { get; set; } = false;
 
         [Required]
         public int EstablishmentId { get; set; }
         public ICollection<ProductExtraItem> Items { get; set; } = [];
+
+        public int? Deleted { get; set; }
 
     }
 }

@@ -10,6 +10,7 @@ public class ProductProfile : Profile
     {
         CreateMap<CreateProductCategoryDto, ProductCategory>();
         CreateMap<CreateProductDto, Product>();
+        CreateMap<UpdateProductDto, Product>();
         // CreateMap<User, ReadUserDto>();
     }
 }
