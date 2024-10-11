@@ -10,6 +10,8 @@ namespace Gestor.Repository.Interfaces
 
         Task<int> AddProductAsync(Product product);
 
-        Task<bool> DeleteProductAsync(int id);
+        Task<bool> DeleteProductAsync(Product product);
+
+        bool UpdateProductAsync(Product product);
     }
 }
