@@ -28,7 +28,8 @@ builder.Services.
         typeof(EstablishmentProfile).Assembly,
         typeof(AccountProfile).Assembly,
         typeof(ProductProfile).Assembly,
-        typeof(ClientProfile).Assembly
+        typeof(ClientProfile).Assembly,
+        typeof(ProductExtraProfile).Assembly
     );
 
 
