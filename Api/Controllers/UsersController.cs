@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Gestor.Domain.Entities;
-using Gestor.Domain.Dtos.UserDtos;
+using Gestor.Domain.Dtos;
 using Gestor.Repository.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,7 +19,7 @@ namespace Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddNew([FromBody] CreateUserDto dto)
+        public async Task<IActionResult> AddNew([FromBody] UserDto.Create dto)
         {
             try
             {
@@ -38,7 +38,7 @@ namespace Api.Controllers
         {
             var data = await _coreRepository.FindUserByIdAsync(id);
             if (data == null) return NotFound();
-            return Ok(_mapper.Map<ReadUserDto>(data));
+            return Ok(_mapper.Map<UserDto.Read>(data));
         }
 
         [HttpGet]
@@ -47,7 +47,7 @@ namespace Api.Controllers
             try
             {
                 var users = await _coreRepository.FindUsersAsync(establishmentId, offset, limit);
-                return Ok(_mapper.Map<IEnumerable<ReadUserDto>>(users));
+                return Ok(_mapper.Map<IEnumerable<UserDto.Read>>(users));
             }
             catch (Exception ex)
             {
@@ -68,22 +68,6 @@ namespace Api.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> UpdateById(int id, [FromBody] UpdateUserDto dto)
-        //{
-        //    try
-        //    {
-        //        var user = await FindUserById(id);
-        //        if (user == null) return NotFound();
-        //        _mapper.Map(dto, user);
-        //        await _coreRepository.SaveChangeAsync();
-        //        return NoContent();
-        //    }
-        //    catch (Exception ex) { 
-        //        return BadRequest(ex.Message);
-        //    }
-        //}      
 
     }
 }

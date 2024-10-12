@@ -1,52 +1,57 @@
 ﻿using AutoMapper;
 using Gestor.Domain.Entities;
-using Gestor.Domain.Dtos.EstablishmentDtos;
+using Gestor.Domain.Dtos;
 using Gestor.Repository.Implementations;
 using Microsoft.AspNetCore.Mvc;
+using Gestor.Domain.Interfaces;
 
 namespace Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class EstablishmentController : ControllerBase
+    public class EstablishmentController(IEstablishmentRepository repo, IEstablishmentHandler handler) : ControllerBase
     {
-        private readonly IEstablishmentRepository _repo;
-        private readonly IMapper _mapper;
-        public EstablishmentController(IEstablishmentRepository repo, IMapper mapper)
-        {
-            _repo = repo;
-            _mapper = mapper;
-        }
-
         [HttpPost]
-        public async Task<IActionResult> AddNew([FromBody] CreateEstablishmentDto dto)
+        public async Task<IActionResult> AddNew([FromBody] EstablishmentDto.Create dto)
         {
             try
             {
-                var newData = _mapper.Map<Establishment>(dto);
-                var newInsertedId = await _repo.AddEstablishmentAsync(newData);
-                var createdData = await _repo.FindEstablishmentById(newInsertedId);
-                return CreatedAtAction(nameof(FindOneById), new { id = newInsertedId }, _mapper.Map<ReadEstablishmentDto>(createdData));
+                var newData = handler.Create(dto);
+                var newInsertedId = await repo.AddEstablishmentAsync(newData);
+                var createdData = await repo.FindEstablishmentById(newInsertedId);
+                return CreatedAtAction(nameof(FindOneById), new { id = newInsertedId }, handler.Read(createdData));
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return Problem(ex.Message);
             }
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> FindOneById(int id)
         {
-            var data = await _repo.FindEstablishmentById(id);
-            if (data == null) return NotFound();
-            return Ok(_mapper.Map<ReadEstablishmentDto>(data));
+            try
+            {
+                var data = await repo.FindEstablishmentById(id);
+                if (data == null) return NotFound();
+                return Ok(handler.Read(data));
+            }
+            catch (Exception ex) {
+                return Problem(ex.Message);
+            }
         }
 
         [HttpGet]
-        public async Task<IEnumerable<ReadEstablishmentDto>> FindAll([FromHeader] int offset = 0, [FromHeader] int limit = 50)
+        public async Task<IActionResult> FindAll([FromHeader] int offset = 0, [FromHeader] int limit = 50)
         {
-            IEnumerable<Establishment> establishments = await _repo.FindEstablishmentAsync(offset, limit);
-            return _mapper.Map<List<ReadEstablishmentDto>>(establishments);
+            try
+            {
+                IEnumerable<Establishment> establishments = await repo.FindEstablishmentAsync(offset, limit);
+                return Ok(handler.Read(establishments));
+            }
+            catch (Exception ex) {
+                return Problem(ex.Message);
+            }
         }
 
         [HttpDelete("{id}")]
@@ -54,7 +59,7 @@ namespace Api.Controllers
         {
             try
             {
-                var data = await _repo.DeleteEstablishmentAsync(id);
+                var data = await repo.DeleteEstablishmentAsync(id);
                 if (!data)
                 {
                     return NotFound();
@@ -63,18 +68,24 @@ namespace Api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return Problem(ex.Message);
             }
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateById(int id, [FromBody] UpdateEstablishmentDto dto)
+        public async Task<IActionResult> UpdateById(int id, [FromBody] EstablishmentDto.Update dto)
         {
-            var establishment = await _repo.FindEstablishmentById(id);
-            if (establishment == null) return NotFound();
-            var updated = _mapper.Map(dto, establishment);
-            var rowsAffected = await _repo.UpdateEstablishmentAsync(id, updated);
-            return NoContent();
+            try
+            {
+                var establishment = await repo.FindEstablishmentById(id);
+                if (establishment == null) return NotFound();
+                var updated = handler.Update(dto, establishment);
+                var rowsAffected = await repo.UpdateEstablishmentAsync(id, updated);
+                return NoContent();
+            }
+            catch (Exception ex) {
+                return Problem(ex.Message);
+            }
         }
     }
 }

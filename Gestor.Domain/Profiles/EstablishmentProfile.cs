@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Gestor.Domain.Entities;
-using Gestor.Domain.Dtos.EstablishmentDtos;
+using Gestor.Domain.Dtos;
 
 namespace Gestor.Domain.Profiles;
 
@@ -8,9 +8,9 @@ public class EstablishmentProfile : Profile
 {
     public EstablishmentProfile()
     {
-        CreateMap<CreateEstablishmentDto, Establishment>();
-        CreateMap<UpdateEstablishmentDto, Establishment>();
-        CreateMap<Establishment, UpdateEstablishmentDto>();
-        CreateMap<Establishment, ReadEstablishmentDto>();
+        CreateMap<EstablishmentDto.Create, Establishment>();
+        CreateMap<EstablishmentDto.Update, Establishment>();
+        CreateMap<Establishment, EstablishmentDto.Update>();
+        CreateMap<Establishment, EstablishmentDto.Read>();
     }
 }

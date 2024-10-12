@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using Gestor.Domain.Dtos;
 using Gestor.Domain.Entities;
-using Gestor.Domain.Dtos.ClientDtos;
 
 namespace Gestor.Domain.Profiles
 {
@@ -8,7 +8,7 @@ namespace Gestor.Domain.Profiles
     {
         public ClientProfile()
         {
-            CreateMap<CreateClientDto, Client>();
+            CreateMap<ClientDto.Create, Client>();
         }
     }
 }

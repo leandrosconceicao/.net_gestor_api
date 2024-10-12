@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Gestor.Domain.Dtos.ProductDtos
+namespace Gestor.Domain.Dtos
 {
-    public class CreateProductXExtraDto
+    public class ProductXExtraDto
     {
         public bool Required { get; set; } = false;
 

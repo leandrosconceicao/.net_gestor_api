@@ -1,9 +1,9 @@
-using AutoMapper;
 using Gestor.Domain.Entities;
-using Gestor.Domain.Dtos.AccountDtos;
+using Gestor.Domain.Dtos;
 using Gestor.Repository.Interfaces;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Gestor.Domain.Interfaces;
 
 namespace Api.Controllers
 {
@@ -11,26 +11,21 @@ namespace Api.Controllers
     [ApiController]
     [Route("[controller]")]
 
-    public class AccountController(IAccountRepository repo, IMapper mapper) : ControllerBase
+    public class AccountController(IAccountRepository repository, IAccountHandler accountHandler) : ControllerBase
     {
 
-        private readonly IAccountRepository _coreRepo = repo;
-
-        private readonly IMapper _mapper = mapper;
-
         [HttpPost]
-        public async Task<IActionResult> AddNew([FromBody] CreateAccountDto dto)
+        public IActionResult AddNew([FromBody] AccountDto.Create dto)
         {
             try
             {
-                var account = _mapper.Map<Account>(dto);
-                _coreRepo.Add(account);
-                await _coreRepo.SaveChangeAsync();
+                var account = accountHandler.Create(dto);
+                repository.Add(account);
                 return CreatedAtAction(nameof(FindOneById), new {id = account.Id}, account);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return Problem(ex.Message);
             }
         }
 
@@ -40,10 +35,10 @@ namespace Api.Controllers
             try
             {
                 var query = await GetAccountById(id);
-                return query == null ? NotFound() : Ok(_mapper.Map<ReadAccountDto>(query));
+                return query == null ? NotFound() : Ok(accountHandler.Read(query));
             }
             catch (Exception ex) {
-                return BadRequest(ex.Message);
+                return Problem(ex.Message);
             }
         }
 
@@ -56,25 +51,25 @@ namespace Api.Controllers
         {
             try
             {
-                var query = await _coreRepo.FindAll(establishmentId, offset, limit);
-                return Ok(_mapper.Map<IEnumerable<ReadAccountDto>>(query));
+                var query = await repository.FindAll(establishmentId, offset, limit);
+                return Ok(accountHandler.Read(query ?? []));
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return Problem(ex.Message);
             }
         }
 
         [HttpPatch("{id}")]
         public async Task<IActionResult> Patch(int id,[FromBody] JsonPatchDocument<Account> document) {
-            if (document == null) return BadRequest();
+            if (document == null) return Problem();
             var account = await GetAccountById(id);
             if (account == null) return NotFound();
             document.ApplyTo(account);
             if (!TryValidateModel(account)) {
                 return BadRequest(ModelState);
             }
-            await _coreRepo.SaveChangeAsync();
+            await repository.SaveChangeAsync();
             return NoContent();
         }
 
@@ -85,21 +80,21 @@ namespace Api.Controllers
             {
                 var query = await GetAccountById(id);
                 if (query == null) return NotFound();
-                bool isDeleted = await _coreRepo.Delete(query.Id);
+                bool isDeleted = await repository.Delete(query.Id);
                 if (!isDeleted) {
-                    return BadRequest("Nenhum dado foi excluido");
+                    return Problem("Nenhum dado foi excluido");
                 }
                 return Ok();
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return Problem(ex.Message);
             }
         }
 
         private async Task<Account?> GetAccountById(int id)
         {
-            return await _coreRepo.FindById(id);
+            return await repository.FindById(id);
         }
 
     }

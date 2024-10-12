@@ -1,37 +1,12 @@
-using Gestor.Domain.Profiles;
-using Gestor.Repository;
-using Gestor.Repository.Db;
-using Gestor.Repository.Implementations;
-using Gestor.Repository.Interfaces;
-using Microsoft.EntityFrameworkCore;
+using Iot;
+using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
+DependencyInjection.BuildInfraestructure(builder);
+
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("SqlConnection");
-
-builder.Services
-        .AddDbContext<ApiContext>(opts =>
-            opts.UseMySQL(connectionString, b => b.MigrationsAssembly("Api"))
-        )
-        .AddScoped<IAccountRepository, AccountRepository>()
-        .AddScoped<IProductCategoryRepository, ProductCategoryRepository>()
-        .AddScoped<IEstablishmentRepository, EstablishmentRepository>()
-        .AddScoped<IUserRepository, UserRepository>()
-        .AddScoped<IProductRepository, ProductRepository>()
-        .AddScoped<IProductExtraRepository, ProductExtraRepository>();
-
-builder.Services.
-    AddAutoMapper(
-        typeof(UserProfile).Assembly,
-        typeof(EstablishmentProfile).Assembly,
-        typeof(AccountProfile).Assembly,
-        typeof(ProductProfile).Assembly,
-        typeof(ClientProfile).Assembly,
-        typeof(ProductExtraProfile).Assembly
-    );
-
 
 builder.Services.AddControllers().AddNewtonsoftJson(opts =>
 {
@@ -39,7 +14,33 @@ builder.Services.AddControllers().AddNewtonsoftJson(opts =>
 });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(opts =>
+{
+    opts.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Insira o token JWT desta maneira {Seu Token}"
+    });
+    opts.AddSecurityRequirement(
+        new OpenApiSecurityRequirement
+        {
+                        {
+                            new OpenApiSecurityScheme {
+                                Reference = new OpenApiReference
+                                {
+                                    Type = ReferenceType.SecurityScheme,
+                                    Id = "Bearer"
+                                }
+                            },
+                            new string[] { }
+                        }
+        }
+    );
+});
 
 var app = builder.Build();
 
@@ -52,8 +53,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
 
+//app.UseMiddleware<ResponseMiddleware>();
 app.Run();

@@ -24,6 +24,8 @@ namespace Gestor.Repository
         public void Add(Account entity)
         {
             _context.Add(entity);
+            var save = _context.SaveChangesAsync();
+            save.Wait();
         }
 
         public async Task<bool> Delete(int id)

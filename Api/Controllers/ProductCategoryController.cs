@@ -2,7 +2,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Gestor.Repository.Interfaces;
 using Gestor.Domain.Entities;
-using Gestor.Domain.Dtos.ProductDtos;
+using Gestor.Domain.Dtos;
 
 namespace Api.Controllers
 {
@@ -21,7 +21,7 @@ namespace Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> NewCategory([FromBody] CreateProductCategoryDto dto)
+        public async Task<IActionResult> NewCategory([FromBody] ProductCategoryDto dto)
         {
             try
             {

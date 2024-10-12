@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Gestor.Domain.Dtos.ProductDtos
+namespace Gestor.Domain.Dtos
 {
-    public class CreateProductExtratoDto
+    public class ProductExtraDto
     {
         [Required]
         public string Name { get; set; }
@@ -11,6 +11,6 @@ namespace Gestor.Domain.Dtos.ProductDtos
 
         [Required]
         public int EstablishmentId { get; set; }
-        public ICollection<CreateProductExtraItemDto> Items { get; set; } = [];
+        public ICollection<ProductExtraItemDto> Items { get; set; } = [];
     }
 }

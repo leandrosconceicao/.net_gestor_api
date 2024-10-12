@@ -1,15 +1,16 @@
-﻿using Gestor.Domain.Dtos.AccountDtos;
-using AutoMapper;
+﻿using AutoMapper;
+using Gestor.Domain.Dtos;
 using Gestor.Domain.Entities;
 
-namespace Gestor.Domain.Profiles;
-
-public class AccountProfile : Profile
+namespace Gestor.Domain.Profiles
 {
-    public AccountProfile()
+    public class AccountProfile : Profile
     {
-        CreateMap<CreateAccountDto, Account>();
-        CreateMap<Account, ReadAccountDto>();
-        CreateMap<UpdateAccountDto, Account>();
+        public AccountProfile()
+        {
+            CreateMap<AccountDto.Create, Account>();
+            CreateMap<Account, AccountDto.Read>();
+            CreateMap<AccountDto.Update, Account>();
+        }
     }
 }

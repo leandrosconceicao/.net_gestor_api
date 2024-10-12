@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Gestor.Domain.Entities;
-using Gestor.Domain.Dtos.ProductDtos;
+using Gestor.Domain.Dtos;
 using Gestor.Repository.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -49,7 +49,7 @@ namespace Api.Controllers
 
         // POST api/<ProductController>
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] CreateProductDto dto)
+        public async Task<IActionResult> Post([FromBody] ProductDto.Create dto)
         {
             try
             {
@@ -65,7 +65,7 @@ namespace Api.Controllers
 
         // PUT api/<ProductController>/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] UpdateProductDto dto)
+        public async Task<IActionResult> Put(int id, [FromBody] ProductDto.Update dto)
         {
             try
             {

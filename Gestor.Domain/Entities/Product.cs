@@ -1,6 +1,4 @@
-﻿using Gestor.Domain.Dtos.ProductDtos;
-using Gestor.Domain.Profiles;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Gestor.Domain.Entities
