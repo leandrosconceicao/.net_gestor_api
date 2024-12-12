@@ -21,7 +21,6 @@ namespace Iot
         {
             var connectionString = builder.Configuration.GetConnectionString("SqlConnection");
             var jwtKey = builder.Configuration.GetSection("Jwt").Value;
-
             builder.Services.AddAuthentication(opts =>
             {
                 opts.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -35,6 +34,20 @@ namespace Iot
                     ValidateAudience = false,
                     ValidateIssuer = false
                 };
+                opts.SaveToken = true;
+                opts.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var accessToken = context.Request.Query["access_token"];
+                        var path = context.HttpContext.Request.Path;
+                        //if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/chat"))
+                        //{
+                        //    context.Token = accessToken;
+                        //}
+                        return Task.CompletedTask;
+                    }
+                };
             });
 
             builder.Services
@@ -42,8 +55,10 @@ namespace Iot
                         opts.UseMySQL(connectionString, b => b.MigrationsAssembly("Api"))
                     )
                     .AddScoped<IAccountHandler, AccountHandler>()
-                    .AddScoped<IAuthenticationRepository, AuthenticationRepository>()
+                    .AddScoped<IUserHandler, UserHandler>()
+                    .AddScoped<IChatHandler, ChatHandler>()
                     .AddScoped<IEstablishmentHandler, EstablishmentHandler>()
+                    .AddScoped<IAuthenticationRepository, AuthenticationRepository>()
                     .AddScoped<IAccountRepository, AccountRepository>()
                     .AddScoped<IProductCategoryRepository, ProductCategoryRepository>()
                     .AddScoped<IEstablishmentRepository, EstablishmentRepository>()
@@ -58,6 +73,7 @@ namespace Iot
                     typeof(AccountProfile).Assembly,
                     typeof(ProductProfile).Assembly,
                     typeof(ClientProfile).Assembly,
+                    typeof(UserProfile).Assembly,
                     typeof(ProductExtraProfile).Assembly
                 );
 
