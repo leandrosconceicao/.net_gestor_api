@@ -53,6 +53,7 @@ namespace Gestor.Repository
                 Token,
                 EstablishmentId,
                 Role,
+                Name,
                 CreatedAt
             ) Values (
                 @Email,
@@ -63,6 +64,7 @@ namespace Gestor.Repository
                 @Token,
                 @EstablishmentId,
                 @Role,
+                @Name,
                 STR_TO_DATE(sysdate(), ""%Y-%m-%d %H:%i:%s"")
             );
             SELECT LAST_INSERT_ID();";
