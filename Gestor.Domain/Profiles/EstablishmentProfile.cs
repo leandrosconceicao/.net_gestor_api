@@ -8,9 +8,9 @@ public class EstablishmentProfile : Profile
 {
     public EstablishmentProfile()
     {
-        CreateMap<EstablishmentDto.Create, Establishment>();
-        CreateMap<EstablishmentDto.Update, Establishment>();
-        CreateMap<Establishment, EstablishmentDto.Update>();
-        CreateMap<Establishment, EstablishmentDto.Read>();
+        CreateMap<EstablishmentDto.CreateEstablishment, Establishment>();
+        CreateMap<EstablishmentDto.UpdateEstablishment, Establishment>();
+        CreateMap<Establishment, EstablishmentDto.UpdateEstablishment>();
+        CreateMap<Establishment, EstablishmentDto.ReadEstablishment>();
     }
 }

@@ -8,7 +8,9 @@ namespace Gestor.Domain.Profiles
     {
         public ClientProfile()
         {
-            CreateMap<ClientDto.Create, Client>();
+            CreateMap<ClientDto.CreateClient, Client>();
+            CreateMap<ClientDto.UpdateClient, Client>();
+            CreateMap<Client, ClientDto.ReadClient>();
         }
     }
 }

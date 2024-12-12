@@ -6,7 +6,7 @@ namespace Gestor.Domain.Dtos
 {
     public class AccountDto
     {
-        public class Read()
+        public class ReadAccount()
         {
             public int Id { get; set; }
 
@@ -16,7 +16,7 @@ namespace Gestor.Domain.Dtos
 
             public int UserId { get; set; }
 
-            public virtual UserDto.Read User { get; set; }
+            public virtual UserDto.ReadUser User { get; set; }
 
             public DateTime CreatedAt { get; set; }
 
@@ -24,23 +24,19 @@ namespace Gestor.Domain.Dtos
 
             public int EstablishmentId { get; set; }
 
-            public virtual EstablishmentDto.Read Establishment { get; set; }
-            public ClientDto.Create? Client { get; set; } = new ClientDto.Create();
+            public virtual EstablishmentDto.ReadEstablishment Establishment { get; set; }
+            public ClientDto.ReadClient? Client { get; set; } = new ClientDto.ReadClient();
         }
-        public class Create()
+        public class UpdateAccount()
         {
-            public string Description { get; set; }
+            public string? Description { get; set; }
 
-            public AccountStatus Status { get; set; } = AccountStatus.Open;
+            public AccountStatus? Status { get; set; }
 
-            public int UserId { get; set; }
-
-            public int EstablishmentId { get; set; }
-
-            public ClientDto.Create? Client { get; set; } = new ClientDto.Create();
+            public int? UserId { get; set; }
+            public ClientDto.UpdateClient? Client { get; set; }
         }
-
-        public class Update()
+        public class CreateAccount()
         {
             public string? Description { get; set; }
 
@@ -54,7 +50,7 @@ namespace Gestor.Domain.Dtos
 
             [Range(1, int.MaxValue, ErrorMessage = "Informe o ID do estabelecimento")]
             public int EstablishmentId { get; set; }
-            public ClientDto.Create? Client { get; set; }
+            public ClientDto.CreateClient? Client { get; set; } = new ClientDto.CreateClient();
         }
     }
 }

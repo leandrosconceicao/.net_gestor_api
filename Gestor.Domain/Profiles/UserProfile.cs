@@ -8,8 +8,8 @@ public class UserProfile : Profile
 {
     public UserProfile()
     {
-        CreateMap<UserDto.Create, User>();
+        CreateMap<UserDto.CreateUser, User>();
         CreateMap<UserDto.Update, User>();
-        CreateMap<User, UserDto.Read>();
+        CreateMap<User, UserDto.ReadUser>();
     }
 }

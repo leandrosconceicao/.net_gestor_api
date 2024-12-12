@@ -5,10 +5,10 @@ namespace Gestor.Domain.Interfaces
 {
     public interface IAccountHandler
     {
-        Account Create(AccountDto.Create dto);
+        Entities.Account Create(Dtos.AccountDto.CreateAccount dto);
 
-        AccountDto.Read Read(Account account);
+        IApiResponse Read(Entities.Account account);
 
-        List<AccountDto.Read> Read(IEnumerable<Account> accounts);
+        IApiResponse Read(IEnumerable<Entities.Account> accounts);
     }
 }

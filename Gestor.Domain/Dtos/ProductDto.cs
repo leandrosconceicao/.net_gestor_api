@@ -4,7 +4,7 @@ namespace Gestor.Domain.Dtos
 {
     public class ProductDto
     {
-        public class Create()
+        public class CreateProduct()
         {
             [Required]
             [StringLength(32)]
@@ -29,7 +29,7 @@ namespace Gestor.Domain.Dtos
 
             public ICollection<ProductXExtraDto> ProductExtras { get; set; } = [];
         }
-        public class Update()
+        public class UpdateProduct()
         {
             public string Name { get; set; }
             public bool IsActive { get; set; } = true;

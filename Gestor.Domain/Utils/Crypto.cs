@@ -30,7 +30,9 @@ namespace Gestor.Domain.Utils
 
         public static string GetHashedPassword(string password)
         {
-            return HashPassword(password, GenerateSalt());
+            return Convert.ToBase64String(
+                System.Security.Cryptography.SHA256.HashData(Encoding.UTF8.GetBytes(password)));
+            //return HashPassword(password, GenerateSalt());
         }
         private static string HashPassword(string password, byte[] salt)
         {

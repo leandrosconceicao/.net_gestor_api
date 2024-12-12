@@ -9,7 +9,7 @@ public class ProductProfile : Profile
     public ProductProfile()
     {
         CreateMap<ProductCategoryDto, ProductCategory>();
-        CreateMap<ProductDto.Create, Product>();
-        CreateMap<ProductDto.Update, Product>();
+        CreateMap<ProductDto.CreateProduct, Product>();
+        CreateMap<ProductDto.UpdateProduct, Product>();
     }
 }

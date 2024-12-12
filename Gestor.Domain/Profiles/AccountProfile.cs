@@ -8,9 +8,9 @@ namespace Gestor.Domain.Profiles
     {
         public AccountProfile()
         {
-            CreateMap<AccountDto.Create, Account>();
-            CreateMap<Account, AccountDto.Read>();
-            CreateMap<AccountDto.Update, Account>();
+            CreateMap<AccountDto.CreateAccount, Account>();
+            CreateMap<Account, AccountDto.ReadAccount>();
+            CreateMap<AccountDto.UpdateAccount, Account>();
         }
     }
 }

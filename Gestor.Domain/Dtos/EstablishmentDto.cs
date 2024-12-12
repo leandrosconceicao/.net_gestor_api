@@ -4,7 +4,7 @@ namespace Gestor.Domain.Dtos
 {
     public class EstablishmentDto
     {
-        public class Read
+        public class ReadEstablishment
         {
             public int Id { get; set; }
             public string Description { get; set; }
@@ -21,7 +21,7 @@ namespace Gestor.Domain.Dtos
             public DateTime CreatedAt { get; set; }
             public DateTime? UpdatedAt { get; set; }
         }
-        public class Create
+        public class CreateEstablishment
         {
             [Key]
             [Required]
@@ -50,8 +50,7 @@ namespace Gestor.Domain.Dtos
             public string Email { get; set; } = string.Empty;
             public string Phone { get; set; } = string.Empty;
         }
-
-        public class Update
+        public class UpdateEstablishment
         {
             public string Description { get; set; }
             public string OwnerId { get; set; }

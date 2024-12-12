@@ -14,21 +14,22 @@ namespace Gestor.Domain.Dtos
             public string Password { get; set; }
         }
 
-        public class Read()
+        public class ReadUser()
         {
             public int Id { get; set; }
             public string Email { get; set; }
             public string UserName { get; set; }
+            public string Name { get; set; }
             public bool IsActived { get; set; } = false;
             public int? Deleted { get; set; }
             public string Token { get; set; }
             public DateTime CreatedAt { get; set; } = DateTime.Now;
             public DateTime? UpdateAt { get; set; }
             public int EstablishmentId { get; set; }
-            public virtual EstablishmentDto.Read Establishment { get; set; }
+            public virtual EstablishmentDto.ReadEstablishment Establishment { get; set; }
             public Role Role { get; set; }
         }
-        public class Create()
+        public class CreateUser()
         {
             private string _password;
 
@@ -36,6 +37,7 @@ namespace Gestor.Domain.Dtos
             [Required]
             public int Id { get; set; }
             [Required(ErrorMessage = "email é campo obrigatório")]
+
             [DataType(DataType.EmailAddress)]
             public string Email { get; set; }
 
@@ -55,9 +57,8 @@ namespace Gestor.Domain.Dtos
 
             [Required(ErrorMessage = "username é campo obrigatório")]
             public string UserName { get; set; }
-
+            public string Name { get; set; } = string.Empty;
             public bool IsActived { get; set; } = true;
-
             public bool ChangePassword { get; set; } = false;
             public string Token { get; set; } = string.Empty;
 
@@ -71,7 +72,6 @@ namespace Gestor.Domain.Dtos
 
             [Range(1, int.MaxValue, ErrorMessage = "Identificação do estabelecimento é obrigatório")]
             public int EstablishmentId { get; set; }
-
             public Role Role { get; set; }
         }
         public class Update() {
@@ -86,16 +86,12 @@ namespace Gestor.Domain.Dtos
 
             [Required(ErrorMessage = "username é campo obrigatório")]
             public string UserName { get; set; }
-
+            public string Name { get; set; }
             public bool IsActived { get; set; } = false;
             public bool? IsDeleted { get; set; }
-
             public string Token { get; set; }
-
             public DateTime CreatedAt { get; set; } = DateTime.Now;
-
             public DateTime UpdateAt { get; set; }
-
             public int EstablishmentId { get; set; }
             public Role Role { get; set; }
         }

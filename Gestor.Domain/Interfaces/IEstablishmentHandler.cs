@@ -5,11 +5,11 @@ namespace Gestor.Domain.Interfaces
 {
     public interface IEstablishmentHandler
     {
-        Establishment Create(EstablishmentDto.Create dto);
-        Establishment Update(EstablishmentDto.Update dto, Establishment establishment);
+        Establishment Create(EstablishmentDto.CreateEstablishment dto);
+        Establishment Update(EstablishmentDto.UpdateEstablishment dto, Establishment establishment);
 
-        EstablishmentDto.Read Read(Establishment account);
+        EstablishmentDto.ReadEstablishment Read(Establishment account);
 
-        List<EstablishmentDto.Read> Read(IEnumerable<Establishment> accounts);
+        List<EstablishmentDto.ReadEstablishment> Read(IEnumerable<Establishment> accounts);
     }
 }

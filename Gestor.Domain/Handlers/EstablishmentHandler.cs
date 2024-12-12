@@ -7,22 +7,22 @@ namespace Gestor.Domain.Handlers
 {
     public class EstablishmentHandler(IMapper mapper) : IEstablishmentHandler
     {
-        public Establishment Create(EstablishmentDto.Create dto)
+        public Establishment Create(EstablishmentDto.CreateEstablishment dto)
         {
             return mapper.Map<Establishment>(dto);
         }
 
-        public EstablishmentDto.Read Read(Establishment Establishment)
+        public EstablishmentDto.ReadEstablishment Read(Establishment Establishment)
         {
-            return mapper.Map<EstablishmentDto.Read>(Establishment);
+            return mapper.Map<EstablishmentDto.ReadEstablishment>(Establishment);
         }
 
-        public List<EstablishmentDto.Read> Read(IEnumerable<Establishment> Establishments)
+        public List<EstablishmentDto.ReadEstablishment> Read(IEnumerable<Establishment> Establishments)
         {
-            return mapper.Map<List<EstablishmentDto.Read>>(Establishments);
+            return mapper.Map<List<EstablishmentDto.ReadEstablishment>>(Establishments);
         }
 
-        public Establishment Update(EstablishmentDto.Update dto, Establishment establishment)
+        public Establishment Update(EstablishmentDto.UpdateEstablishment dto, Establishment establishment)
         {
             return mapper.Map(dto, establishment);
         }

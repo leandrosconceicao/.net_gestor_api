@@ -7,19 +7,25 @@ namespace Gestor.Domain.Handlers
 {
     public class AccountHandler(IMapper mapper) : IAccountHandler
     {
-        public Account Create(AccountDto.Create dto)
+        public Entities.Account Create(Dtos.AccountDto.CreateAccount dto)
         {
-            return mapper.Map<Account>(dto);
+            return mapper.Map<Entities.Account>(dto);
         }
 
-        public AccountDto.Read Read(Account account)
+        public IApiResponse Read(Entities.Account account)
         {
-            return mapper.Map<AccountDto.Read>(account);
+            return new SuccessResponse<AccountDto.ReadAccount>
+            {
+                Dados = mapper.Map<Dtos.AccountDto.ReadAccount>(account)
+            };
         }
 
-        public List<AccountDto.Read> Read(IEnumerable<Account> accounts)
+        public IApiResponse Read(IEnumerable<Entities.Account> accounts)
         {
-            return mapper.Map<List<AccountDto.Read>>(accounts);
+            return new SuccessResponse<List<Dtos.AccountDto.ReadAccount>>
+            {
+               Dados = mapper.Map<List<Dtos.AccountDto.ReadAccount>>(accounts)
+            };
         }
     }
 }
