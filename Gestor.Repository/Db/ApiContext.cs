@@ -1,10 +1,33 @@
 ﻿using Gestor.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata;
 
 namespace Gestor.Repository.Db
 {
     public class ApiContext(DbContextOptions<ApiContext> opts) : DbContext(opts)
     {
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>()
+                .HasIndex(u => new {u.Email, u.EstablishmentId })
+                .IsUnique();
+
+            modelBuilder.Entity<Establishment>()
+                .HasIndex(est => new { est.OwnerId, est.Description })
+                .IsUnique();
+
+            modelBuilder.Entity<Product>()
+                .HasIndex(prod => new { prod.EstablishmentId, prod.Name })
+                .IsUnique();
+
+            modelBuilder.Entity<ProductCategory>()
+                .HasIndex(cat => new { cat.EstablishmentId, cat.Description })
+                .IsUnique();
+            
+            modelBuilder.Entity<ProductExtra>()
+                .HasIndex(prodEx => new { prodEx.EstablishmentId, prodEx.Name })
+                .IsUnique();
+        }
         public DbSet<Account> Accounts { get; set; }
 
         public DbSet<Client> Clients { get; set; }
