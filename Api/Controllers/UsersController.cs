@@ -1,44 +1,39 @@
-﻿using AutoMapper;
-using Gestor.Domain.Entities;
-using Gestor.Domain.Dtos;
+﻿using Gestor.Domain.Dtos;
 using Gestor.Repository.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Gestor.Domain.Interfaces;
+using System.Data.Common;
+using System.Data;
+using Gestor.Domain.Exceptions;
 
 namespace Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class UsersController : ControllerBase
+    public class UsersController(IUserRepository repo, IUserHandler userHandler) : ControllerBase
     {
-        private readonly IUserRepository _coreRepository;
-        private readonly IMapper _mapper;
-        public UsersController(IUserRepository repo, IMapper mapper)
-        {
-            _coreRepository = repo;
-            _mapper = mapper;
-        }
-
         [HttpPost]
-        public async Task<IActionResult> AddNew([FromBody] UserDto.Create dto)
+        public async Task<IActionResult> AddNew([FromBody] UserDto.CreateUser dto)
         {
             try
             {
-                User? user = _mapper.Map<User>(dto);
+                var user = userHandler.Create(dto);
 
-                var idCreated = await _coreRepository.AddUserAsync(user);
+                var idCreated = await repo.AddUserAsync(user);
                 return CreatedAtAction(nameof(FindOneById), new { id = idCreated }, user);
             }
-            catch (Exception ex) { 
-                return BadRequest(ex.Message);
+            catch (Exception ex) {
+                if (ex.Message.Contains("Duplicate")) throw new DuplicateDataError(ex.Message);
+                throw;
             }
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> FindOneById(int id)
         {
-            var data = await _coreRepository.FindUserByIdAsync(id);
+            var data = await repo.FindUserByIdAsync(id);
             if (data == null) return NotFound();
-            return Ok(_mapper.Map<UserDto.Read>(data));
+            return Ok(userHandler.Read(data));
         }
 
         [HttpGet]
@@ -46,8 +41,8 @@ namespace Api.Controllers
         {
             try
             {
-                var users = await _coreRepository.FindUsersAsync(establishmentId, offset, limit);
-                return Ok(_mapper.Map<IEnumerable<UserDto.Read>>(users));
+                var users = await repo.FindUsersAsync(establishmentId, offset, limit);
+                return Ok(userHandler.Read(users));
             }
             catch (Exception ex)
             {
@@ -59,7 +54,7 @@ namespace Api.Controllers
         public async Task<IActionResult> Delete(int id) {
             try
             {
-                var isUserDeleted = await _coreRepository.DeleteUserAsync(id);
+                var isUserDeleted = await repo.DeleteUserAsync(id);
                 if (!isUserDeleted) return NotFound();
                 return Ok();
             }

@@ -1,8 +1,24 @@
+using Microsoft.AspNetCore.Http.Connections;
+using Gestor.Domain.Middlewares;
+using Gestor.Domain.Utils;
 using Iot;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddCors(o => o.AddPolicy("CorsPolicy", builder => {
+    builder
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+    .AllowCredentials()
+    .WithOrigins("https://0.0.0.0:5000");
+}));
+
+builder.Services.AddSignalR(hubOptions =>
+{
+    hubOptions.EnableDetailedErrors = true;
+});
 
 DependencyInjection.BuildInfraestructure(builder);
 
@@ -51,12 +67,21 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
+
+app.UseWebSockets();
+
+app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
 
-//app.UseMiddleware<ResponseMiddleware>();
+app.MapHub<ChatHub>("/chat");
+
+app.UseMiddleware<ErrorResponseMiddleware>();
 app.Run();

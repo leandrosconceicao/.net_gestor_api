@@ -12,7 +12,7 @@ namespace Api.Controllers
     public class EstablishmentController(IEstablishmentRepository repo, IEstablishmentHandler handler) : ControllerBase
     {
         [HttpPost]
-        public async Task<IActionResult> AddNew([FromBody] EstablishmentDto.Create dto)
+        public async Task<IActionResult> AddNew([FromBody] EstablishmentDto.CreateEstablishment dto)
         {
             try
             {
@@ -73,7 +73,7 @@ namespace Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateById(int id, [FromBody] EstablishmentDto.Update dto)
+        public async Task<IActionResult> UpdateById(int id, [FromBody] EstablishmentDto.UpdateEstablishment dto)
         {
             try
             {

@@ -3,12 +3,13 @@ using Gestor.Domain.Dtos;
 using Gestor.Domain.Interfaces;
 using Gestor.Domain.Utils;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class AuthController(IAuthenticationRepository repo) : ControllerBase
+    public class AuthController(IAuthenticationRepository repo, IHubContext<ChatHub, IChatHub> hub) : ControllerBase
     {
         [HttpPost]
         public IActionResult Login([FromBody] UserDto.Login dto)
@@ -26,6 +27,13 @@ namespace Api.Controllers
             {
                 return Problem(ex.Message);
             }
+        }
+
+        [HttpPost("/post_message")]
+        public IActionResult PostMessage([FromBody] MessageDto dto)
+        {
+            hub.Clients.All.NotifyUsers(dto);
+            return NoContent();
         }
 
     }

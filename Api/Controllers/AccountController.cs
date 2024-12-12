@@ -4,6 +4,8 @@ using Gestor.Repository.Interfaces;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Gestor.Domain.Interfaces;
+using Gestor.Domain.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Api.Controllers
 {
@@ -15,7 +17,7 @@ namespace Api.Controllers
     {
 
         [HttpPost]
-        public IActionResult AddNew([FromBody] AccountDto.Create dto)
+        public IActionResult AddNew([FromBody] Gestor.Domain.Dtos.AccountDto.CreateAccount dto)
         {
             try
             {
@@ -35,33 +37,37 @@ namespace Api.Controllers
             try
             {
                 var query = await GetAccountById(id);
-                return query == null ? NotFound() : Ok(accountHandler.Read(query));
+                if (query == null)
+                {
+                    throw new NotFoundError("Conta não localizada");
+                }
+                var data = accountHandler.Read(query);
+                return Ok(data);
             }
-            catch (Exception ex) {
-                return Problem(ex.Message);
+            catch (Exception)
+            {
+                throw;
             }
         }
 
         [HttpGet]
-        public async Task<IActionResult> FindAll(
-            [FromQuery(Name = "branch_code")] int establishmentId,
-            [FromHeader] int offset = 0,
-            [FromHeader] int limit = 50
+        public async Task<IActionResult> FindAll([FromQuery(Name = "storeCode")] int establishmentId, [FromHeader] int offset = 0, [FromHeader] int limit = 50
         )
         {
             try
             {
+                if (establishmentId == 0) throw new NotFoundError("Estabelecimento inválido ou não foi informado");
                 var query = await repository.FindAll(establishmentId, offset, limit);
                 return Ok(accountHandler.Read(query ?? []));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return Problem(ex.Message);
+                throw;
             }
         }
 
         [HttpPatch("{id}")]
-        public async Task<IActionResult> Patch(int id,[FromBody] JsonPatchDocument<Account> document) {
+        public async Task<IActionResult> Patch(int id,[FromBody] JsonPatchDocument<Gestor.Domain.Entities.Account> document) {
             if (document == null) return Problem();
             var account = await GetAccountById(id);
             if (account == null) return NotFound();
@@ -92,7 +98,7 @@ namespace Api.Controllers
             }
         }
 
-        private async Task<Account?> GetAccountById(int id)
+        private async Task<Gestor.Domain.Entities.Account?> GetAccountById(int id)
         {
             return await repository.FindById(id);
         }

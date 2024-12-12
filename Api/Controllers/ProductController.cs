@@ -49,7 +49,7 @@ namespace Api.Controllers
 
         // POST api/<ProductController>
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] ProductDto.Create dto)
+        public async Task<IActionResult> Post([FromBody] ProductDto.CreateProduct dto)
         {
             try
             {
@@ -65,7 +65,7 @@ namespace Api.Controllers
 
         // PUT api/<ProductController>/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] ProductDto.Update dto)
+        public async Task<IActionResult> Put(int id, [FromBody] ProductDto.UpdateProduct dto)
         {
             try
             {
